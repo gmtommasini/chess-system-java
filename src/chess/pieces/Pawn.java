@@ -56,7 +56,7 @@ public class Pawn extends ChessPiece {
 			// pawn's first move can be 2
 			if (this.getMoveCount() == 0) {
 				p.setValues(position.getRow() + 2, position.getColumn());
-				Position p2 = new Position(position.getRow() - 1, position.getColumn());
+				Position p2 = new Position(position.getRow() + 1, position.getColumn());
 				// ahead
 				if (getBoard().positionExists(p) && !getBoard().thereIsAPiece(p) && !getBoard().thereIsAPiece(p2)) {
 					mat[p.getRow()][p.getColumn()] = true;
