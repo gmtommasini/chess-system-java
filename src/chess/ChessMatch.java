@@ -8,11 +8,22 @@ import chess.pieces.King;
 import chess.pieces.Rook;
 
 public class ChessMatch {
+	private int turn;
+	private Color currentPlayer;
 	private Board board;
 
 	public ChessMatch() {
 		board = new Board(8, 8);
+		turn = 1;
+		currentPlayer = Color.WHITE;
 		initialSetup();
+	}
+	
+	public int getTurn() {
+		return turn;
+	}
+	public Color getCurrentPlayer() {
+		return currentPlayer;
 	}
 
 	public ChessPiece[][] getPieces() {
@@ -37,6 +48,7 @@ public class ChessMatch {
 		validateSourcePosition(src);
 		validateTargetPosition(src, dst);
 		Piece capturedPiece = makeMove(src, dst);
+		nextTurn();
 		return (ChessPiece) capturedPiece;
 	}
 
@@ -51,6 +63,9 @@ public class ChessMatch {
 		if (!board.thereIsAPiece(pos)) {
 			throw new ChessException("There is no piece in the source position.");
 		}
+		if(currentPlayer != ( (ChessPiece)board.piece(pos) ).getColor()) {
+			throw new ChessException("Chosen piece is not yours.");
+		}
 		if(!board.piece(pos).isThereAnyPossibleMove()) {
 			throw new ChessException("There is no possible moves for the chosen piece.");
 		}
@@ -64,6 +79,13 @@ public class ChessMatch {
 	private void placeNewPiece(char col, int row, ChessPiece piece) {
 		board.placePiece(piece, new ChessPosition(col, row).toPosition());
 	}
+	
+	private void nextTurn() {
+		turn++;
+		currentPlayer =  currentPlayer == Color.WHITE ? Color.BLACK : Color.WHITE;		
+	}
+	
+	
 
 	private void initialSetup() {
 		placeNewPiece('c', 1, new Rook(board, Color.WHITE));
